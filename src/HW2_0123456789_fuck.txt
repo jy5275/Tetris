@@ -1,0 +1,125 @@
+////////
+import java.util.*;
+import java.io.*;
+
+////////
+public class HW2_0123456789 extends Tetris {
+	// enter your student id here
+	public String id = new String("1600013239");
+	
+	// ####
+	public int piecetype;	
+	public void initPiece(Random rand) {
+		switch (0) {
+			case 0:		//【横条】
+				piecetype = 0;
+				piece = new boolean[][]{{true,false,false,false},
+				                        {true,false,false,false},
+				                        {true,false,false,false},
+				                        {true,false,false,false}};
+				break;
+			case 1:		//【z字形】
+				piecetype = 1;
+				piece = new boolean[][]{{false,false,false,false},
+				                        { true, true,false,false},
+				                        {false, true, true,false},
+				                        {false,false,false,false}};
+				break;
+			case 2:		//【反z字形】
+				piecetype = 2;
+				piece = new boolean[][]{{false,false,false,false},
+				                        {false,false, true, true},
+				                        {false, true, true,false},
+				                        {false,false,false,false}};
+				break;
+			case 3:		//【L形】
+				piecetype = 3;
+				piece = new boolean[][]{{false,false,false,false},
+				                        { true, true, true,false},
+				                        { true,false,false,false},
+				                        {false,false,false,false}};
+				break;
+			case 4:		//【反L形】
+				piecetype = 4;
+				piece = new boolean[][]{{false,false,false,false},
+				                        {false, true, true, true},
+				                        {false,false,false, true},
+				                        {false,false,false,false}};
+				break;
+			case 5:		//【陕西形】
+				piecetype = 5;
+				piece = new boolean[][]{{false,false,false,false},
+				                        { true, true, true,false},
+				                        {false, true,false,false},
+				                        {false,false,false,false}};
+				break;	
+			case 6:		//【实心正方形】
+				piecetype = 6;
+				piece = new boolean[][]{{false,false,false,false},
+				                        {false, true, true,false},
+				                        {false, true, true,false},
+				                        {false,false,false,false}};
+				break;
+		}
+
+		// deploy, 部署到board, 最初产生在中间
+		piece_y = h-1;	piece_x = w/2;
+		for (int y = 0; y < 4; y++) 
+			for (int x = 0; x < 4; x++) 
+				if (piece[y][x]) 
+					board[piece_y-y][piece_x+x] = true;
+	}
+
+	public PieceOperator robotPlay() {
+		//System.out.println(piece_y+" "+piece_x);
+
+		/* //左右平衡法
+		int lw = 0, rw = 0;
+		for (int i=0; i<h; i++){
+			int j=0;
+			for (j=0; j<w/2; j++)	// 左半边
+				if (board[i][j]) lw++;
+			for (;j<w;j++)
+				if (board[i][j]) rw++;
+		}
+		if(lw>rw){
+			switch (new Random().nextInt(4)) {
+				case 0: return PieceOperator.ShiftRight;
+				case 1: return PieceOperator.ShiftRight;
+				case 2: return PieceOperator.Rotate;
+				case 3: return PieceOperator.ShiftLeft;
+			}
+		}
+		switch (new Random().nextInt(4)) {
+			case 0: return PieceOperator.ShiftLeft;
+			case 1: return PieceOperator.ShiftLeft;
+			case 2: return PieceOperator.Rotate;
+			case 3: return PieceOperator.ShiftRight;
+		}
+		return PieceOperator.ShiftLeft;
+		*/
+	
+		if (piece_y>=6 && piece_x>0 &&piece_x+1<w && !board[piece_y-6][piece_x] 
+			&& !board[piece_y-6][piece_x+1]){
+			switch (new Random().nextInt(3)) {
+				case 0: return PieceOperator.ShiftLeft;
+				case 1: return PieceOperator.ShiftRight;
+				case 2: return PieceOperator.ShiftLeft;
+			}
+		}
+		if (piece_y>=6 && piece_x+3<w && !board[piece_y-6][piece_x+2]
+			&& !board[piece_y-6][piece_x+3]){
+			switch (new Random().nextInt(3)) {
+				case 0: return PieceOperator.ShiftLeft;
+				case 1: return PieceOperator.ShiftRight;
+				case 2: return PieceOperator.ShiftRight;
+			}
+		}
+		switch (new Random().nextInt(2)) {
+			case 0: return PieceOperator.ShiftLeft;
+			case 1: return PieceOperator.ShiftRight;
+			case 2: return PieceOperator.Rotate;
+		}
+		return PieceOperator.Keep;
+	}
+}
